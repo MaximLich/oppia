@@ -22,17 +22,18 @@
        ng-class="{'animate-card-width': startCardChangeAnimation,
                   'has-shadow': isViewportNarrow() && !isInteractionInline}">
     <div class="conversation-skin-tutor-card-content conversation-skin-animate-tutor-card-content"
-         ng-class="{'animate-card-change': startCardChangeAnimation}">
+         ng-class="{'animate-card-change': startCardChangeAnimation && !isDialog}"
+         ng-repeat="hCard in (isDialog ? historyCards : [activeCard])">
       <div class="conversation-skin-tutor-card-top-section">
         <img class="conversation-skin-oppia-avatar"
              ng-src="<[OPPIA_AVATAR_IMAGE_URL]>" alt="">
         <div class="conversation-skin-tutor-card-top-content protractor-test-conversation-content"
-             angular-html-bind="activeCard.contentHtml"
+             angular-html-bind="hCard.contentHtml"
              focus-on="<[getContentFocusLabel($index)]>">
         </div>
       </div>
 
-      <div ng-if="(activeCard.answerFeedbackPairs.length > 1 && isInteractionInline) || (activeCard.answerFeedbackPairs.length > 0 && !isInteractionInline)">
+      <div ng-if="!isDialog && ((activeCard.answerFeedbackPairs.length > 1 && isInteractionInline) || (activeCard.answerFeedbackPairs.length > 0 && !isInteractionInline))">
         <h4 class="conversation-skin-responses-dropdown-container"
             ng-click="toggleShowPreviousResponses()">
           <span class="conversation-skin-responses-dropdown-text">
@@ -47,11 +48,12 @@
         </h4>
       </div>
 
-      <div ng-show="arePreviousResponsesShown"
+      <div ng-show="isDialog || arePreviousResponsesShown"
            class="conversation-skin-tutor-card-middle-section conversation-skin-responses-animate-slide">
-        <div ng-repeat="responsePair in activeCard.answerFeedbackPairs track by $index">
+        <div ng-repeat="responsePair in hCard.answerFeedbackPairs track by $index">
           <div ng-if="!$last || !isInteractionInline">
             <answer-feedback-pair data="responsePair"
+                                  card="hCard"
                                   profile-picture="profilePicture"
                                   oppia-avatar-image-url="OPPIA_AVATAR_IMAGE_URL">
             </answer-feedback-pair>
@@ -60,8 +62,9 @@
       </div>
 
       <!-- If the interaction is inline, always show the most recent response pair, if there is one. -->
-      <div class="conversation-skin-tutor-card-bottom-section" ng-if="isInteractionInline && activeCard.answerFeedbackPairs.length > 0">
-        <answer-feedback-pair data="activeCard.answerFeedbackPairs[activeCard.answerFeedbackPairs.length - 1]"
+      <div class="conversation-skin-tutor-card-bottom-section" ng-if="isInteractionInline && hCard.answerFeedbackPairs.length > 0">
+        <answer-feedback-pair data="hCard.answerFeedbackPairs[hCard.answerFeedbackPairs.length - 1]"
+                              card="hCard"
                               profile-picture="profilePicture"
                               oppia-avatar-image-url="OPPIA_AVATAR_IMAGE_URL">
         </answer-feedback-pair>
@@ -76,13 +79,14 @@
         In addition, if the exploration is iframed, the terminal card will
         have no learner input section, so we do not show it.
       -->
-      <div ng-if="isInteractionInline && isCurrentCardAtEndOfTranscript() && !waitingForOppiaFeedback &&
+      <div ng-if="$last && hCard.stateName == activeCard.stateName && isInteractionInline && isCurrentCardAtEndOfTranscript() && !waitingForOppiaFeedback &&
       ((activeCard.interactionHtml && !activeCard.destStateName) || activeCard.destStateName) &&
       (!isOnTerminalCard() || !isIframed || activeCard.destStateName)">
         <div class="conversation-skin-inline-interaction">
           <div ng-if="activeCard.destStateName && activeCard.answerFeedbackPairs[activeCard.answerFeedbackPairs.length - 1].oppiaFeedbackHtml">
+            <div ng-if="isDialog" ng-init="onClickContinueButton()"></div>
             <md-button class="oppia-learner-continue-button protractor-test-continue-to-next-card-button"
-                       ng-if="!isIframed"
+                       ng-if="!isIframed && !isDialog"
                        focus-on="<[CONTINUE_BUTTON_FOCUS_LABEL]>"
                        ng-click="onClickContinueButton()"
                        translate="I18N_PLAYER_CONTINUE_BUTTON"
@@ -97,7 +101,7 @@
         </div>
       </div>
 
-      <div ng-if="!isInteractionInline"
+      <div ng-if="$last && hCard.stateName == activeCard.stateName && !isInteractionInline"
           class="conversation-skin-inline-interaction" style="opacity: 0.8;">
         <div ng-if="!isViewportNarrow()" style="padding: 6px 12px;">
           <[interactionInstructions]>

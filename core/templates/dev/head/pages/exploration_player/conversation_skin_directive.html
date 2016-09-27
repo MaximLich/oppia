@@ -1,10 +1,11 @@
 <script type="text/ng-template" id="skins/Conversation">
   <div role="main" style="margin: 0 auto; position: relative;" ng-if="hasFullyLoaded">
-    <progress-dots num-dots="numProgressDots" class="conversation-skin-progress-dots">
+    <progress-dots num-dots="numProgressDots" class="conversation-skin-progress-dots"
+                   ng-click="toggleConversation(0)">
     </progress-dots>
 
     <div class="conversation-skin-cards-container conversation-skin-animate-cards"
-         ng-class="{'animate-to-two-cards': isAnimatingToTwoCards, 'animate-to-one-card': isAnimatingToOneCard}">
+         ng-class="{'animate-to-two-cards': isAnimatingToTwoCards, 'animate-to-one-card': isAnimatingToOneCard, 'conversation-dialog': isDialog}">
 
       <div class="conversation-skin-tutor-card-container"
            ng-show="!isViewportNarrow() || isScreenNarrowAndShowingTutorCard()"
@@ -15,8 +16,23 @@
         <tutor-card on-click-continue-button="showUpcomingCard()"
                     on-submit-answer="submitAnswer(answer, rulesService)"
                     on-dismiss="showSupplementalCardIfScreenIsNarrow()"
-                    start-card-change-animation="startCardChangeAnimation">
+                    start-card-change-animation="startCardChangeAnimation"
+                    is-dialog="isDialog"
+                    history-cards="historyCards">
         </tutor-card>
+        <conversation-toggle class="conversation-skin-toggle">
+          <div class="oppia-conversation-toggle"
+                ng-class="{'oppia-conversation-toggle-dialog' : isDialog}"
+                ng-click="toggleConversation()">
+            <span class="conversation-skin-toggle-text">
+                Conversation display mode
+            </span>
+            <span class="conversation-skin-toggle-icon"
+                  ng-class="{'conversation-skin-toggle-icon-rotated': isDialog}">
+              <i class="material-icons">&#xE037;</i>
+            </span>
+          </div>
+        </conversation-toggle>
       </div>
 
       <div ng-if="isCurrentSupplementalCardNonempty()"
@@ -361,7 +377,6 @@
         height: 40px;
         left: 100%;
         position: absolute;
-        position: absolute;
         transform: translate(-100%, -100%);
         width: 40px;
         z-index: 16;
@@ -370,5 +385,57 @@
         opacity: 0.8;
       }
     }
+
+    /* Conversation dialog */
+    .conversation-dialog .conversation-skin-supplemental-card-container {
+      align-self: flex-end;
+    }
+    @media screen and (max-width: 959px) {
+      .conversation-dialog .conversation-skin-tutor-card-container {
+        padding-bottom: 56px;
+      }
+    }
+    /* /Conversation dialog */
+
+    /* Toggle conversation dialog button */
+    .conversation-skin-toggle {
+      display: block;
+    }
+
+    .oppia-conversation-toggle {
+      text-align: center;
+      line-height: 1.5;
+      color: #fff;
+      background-color: #009688;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .oppia-conversation-toggle-dialog {
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .conversation-skin-toggle-text {
+      vertical-align: middle;
+    }
+
+    .conversation-skin-toggle-icon {
+      display: inline-block;
+      vertical-align: middle;
+      -moz-transition: all 0.2s;
+      -o-transition: all 0.2s;
+      -webkit-transition: all 0.2s;
+      font-size: 10px;
+      transition: 0.2s;
+    }
+
+    .conversation-skin-toggle-icon-rotated {
+      -moz-transform: rotate(-90deg);
+      -o-transform: rotate(-90deg);
+      -webkit-transform: rotate(-90deg);
+      transform: rotate(-90deg);
+    }
+    /* /Toggle conversation dialog button */
   </style>
 </script>

@@ -190,7 +190,9 @@ oppia.animation('.conversation-skin-animate-cards', function() {
 oppia.directive('conversationSkin', ['urlService', function(urlService) {
   return {
     restrict: 'E',
-    scope: {},
+    scope: {
+      isDialog: '&'
+    },
     link: function(scope) {
       var isIframed = urlService.isIframed();
       scope.directiveTemplateId = isIframed ?
@@ -249,6 +251,9 @@ oppia.directive('conversationSkin', ['urlService', function(urlService) {
 
         $scope.DEFAULT_TWITTER_SHARE_MESSAGE_PLAYER =
           GLOBALS.DEFAULT_TWITTER_SHARE_MESSAGE_PLAYER;
+
+        // Default conversation mode display
+        $scope.isDialog = false;
 
         $scope.getContentFocusLabel = function(index) {
           return CONTENT_FOCUS_LABEL_PREFIX + index;
@@ -572,7 +577,11 @@ oppia.directive('conversationSkin', ['urlService', function(urlService) {
 
           $timeout(function() {
             focusService.setFocusIfOnDesktop(_nextFocusLabel);
-            scrollToTop();
+            if ($scope.isDialog) {
+              scrollToBottom();
+            } else {
+              scrollToTop();
+            }
           },
           TIME_FADEOUT_MSEC + TIME_HEIGHT_CHANGE_MSEC + 0.5 * TIME_FADEIN_MSEC);
 
@@ -591,7 +600,7 @@ oppia.directive('conversationSkin', ['urlService', function(urlService) {
 
         var scrollToBottom = function() {
           $timeout(function() {
-            var tutorCard = $('.conversation-skin-main-tutor-card');
+            var tutorCard = $('.conversation-skin-tutor-card-container');
 
             if (tutorCard.length === 0) {
               return;
@@ -731,6 +740,30 @@ oppia.directive('conversationSkin', ['urlService', function(urlService) {
 
         $scope.getExplorationGadgetPanelsContents = function() {
           return ExplorationPlayerStateService.getGadgetPanelsContents();
+        };
+
+        $scope.toggleConversation = function(mode) {
+          switch (mode) {
+            case 0: $scope.isDialog = false;
+              break;
+            case 1: $scope.isDialog = true;
+              break;
+            default: $scope.isDialog = !$scope.isDialog;
+          }
+
+          if ($scope.isDialog) {
+            playerPositionService.setActiveCardIndex(
+              $scope.numProgressDots - 1);
+          }
+
+          $timeout(function() {
+            if ($scope.isDialog) {
+              scrollToBottom();
+            } else {
+              scrollToTop();
+            }
+          },
+          TIME_FADEOUT_MSEC + TIME_HEIGHT_CHANGE_MSEC + 0.5 * TIME_FADEIN_MSEC);
         };
       }
     ]

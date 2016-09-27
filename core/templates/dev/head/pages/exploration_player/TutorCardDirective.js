@@ -83,7 +83,8 @@ oppia.directive('tutorCard', [function() {
       onClickContinueButton: '&',
       onSubmitAnswer: '&',
       onDismiss: '&',
-      startCardChangeAnimation: '='
+      startCardChangeAnimation: '=',
+      isDialog: '='
     },
     templateUrl: 'components/TutorCard',
     controller: [
@@ -104,6 +105,7 @@ oppia.directive('tutorCard', [function() {
 
           $scope.arePreviousResponsesShown = false;
           $scope.activeCard = playerTranscriptService.getCard(index);
+          $scope.historyCards = playerTranscriptService.getHistoryCards();
 
           $scope.isInteractionInline = (
             ExplorationPlayerStateService.isInteractionInline(
@@ -113,6 +115,8 @@ oppia.directive('tutorCard', [function() {
             ExplorationPlayerStateService.getInteractionInstructions(
               $scope.activeCard.stateName));
         };
+
+        $scope.historyCards = null;
 
         $scope.arePreviousResponsesShown = false;
 
