@@ -39,7 +39,8 @@
   <oppia-gadget-panel ng-if="activeCard"
                       panel-contents="getExplorationGadgetPanelsContents().bottom"
                       class="conversation-skin-bottom-gadget-panel"
-                      current-state-name="activeCard.stateName">
+                      current-state-name="activeCard.stateName"
+                      submit-answer="submitAnswer">
   </oppia-gadget-panel>
 
   <div ng-if="isOnTerminalCard() && isLoggedIn && !isInPreviewMode && !isIframed && isCurrentCardAtEndOfTranscript()" class="conversation-skin-final-ratings">

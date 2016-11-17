@@ -27,7 +27,8 @@
 
 var GADGETS = {
   AdviceBar: require('./AdviceBar/protractor.js'),
-  ScoreBar: require('./ScoreBar/protractor.js')
+  ScoreBar: require('./ScoreBar/protractor.js'),
+  Continue: require('./Continue/protractor.js')
 };
 
 var getGadget = function(gadgetType) {

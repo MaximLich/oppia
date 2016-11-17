@@ -43,17 +43,19 @@ oppia.factory('AnswerClassificationService', [
     var classifyAnswer = function(
         answer, answerGroups, defaultOutcome, interactionRulesService) {
       // Find the first group that contains a rule which returns true
-      for (var i = 0; i < answerGroups.length; i++) {
-        for (var j = 0; j < answerGroups[i].rule_specs.length; j++) {
-          var ruleSpec = answerGroups[i].rule_specs[j];
-          if (ruleSpec.rule_type !== CLASSIFIER_RULESPEC_STR &&
-              interactionRulesService[ruleSpec.rule_type](
-                answer, ruleSpec.inputs)) {
-            return {
-              outcome: answerGroups[i].outcome,
-              answerGroupIndex: i,
-              ruleSpecIndex: j
-            };
+      if (interactionRulesService.iwanttogetthenextcard !== true) {
+        for (var i = 0; i < answerGroups.length; i++) {
+          for (var j = 0; j < answerGroups[i].rule_specs.length; j++) {
+            var ruleSpec = answerGroups[i].rule_specs[j];
+            if (ruleSpec.rule_type !== CLASSIFIER_RULESPEC_STR &&
+                interactionRulesService[ruleSpec.rule_type](
+                  answer, ruleSpec.inputs)) {
+              return {
+                outcome: answerGroups[i].outcome,
+                answerGroupIndex: i,
+                ruleSpecIndex: j
+              };
+            }
           }
         }
       }
