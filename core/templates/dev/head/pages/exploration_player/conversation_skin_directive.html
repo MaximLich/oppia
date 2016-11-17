@@ -36,7 +36,8 @@
 
   <oppia-gadget-panel ng-if="activeCard" current-state-name="activeCard.stateName"
                       panel-contents="getExplorationGadgetPanelsContents().bottom"
-                      class="conversation-skin-bottom-gadget-panel">
+                      class="conversation-skin-bottom-gadget-panel"
+                      submit-answer="submitAnswer">
   </oppia-gadget-panel>
 
   <div ng-if="isOnTerminalCard() && isCurrentCardAtEndOfTranscript()">

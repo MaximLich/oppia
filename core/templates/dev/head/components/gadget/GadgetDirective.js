@@ -22,7 +22,8 @@ oppia.directive('oppiaGadget', function() {
     scope: {
       gadgetCustomizationArgs: '&',
       gadgetName: '&',
-      gadgetType: '&'
+      gadgetType: '&',
+      submitAnswer: '='
     },
     templateUrl: 'components/gadget',
     controller: [
@@ -37,6 +38,9 @@ oppia.directive('oppiaGadget', function() {
         el.attr(
           'gadget-name',
           oppiaHtmlEscaper.objToEscapedJson($scope.gadgetName()));
+        if ($scope.gadgetName().indexOf('Continue') === 0) {
+          el.attr('on-submit', 'submitAnswer(answer, rulesService);');
+        }
 
         $scope.gadgetHtml = ($('<div>').append(el)).html();
       }

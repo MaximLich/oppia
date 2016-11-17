@@ -379,6 +379,9 @@ ALLOWED_GADGETS = {
     'ScoreBar': {
         'dir': os.path.join(GADGETS_DIR, 'ScoreBar')
     },
+    'Continue': {
+        'dir': os.path.join(GADGETS_DIR, 'Continue')
+    },
 }
 
 # Gadgets subclasses must specify a valid panel option from this list.

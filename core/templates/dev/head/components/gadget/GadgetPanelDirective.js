@@ -21,7 +21,8 @@ oppia.directive('oppiaGadgetPanel', function() {
     restrict: 'E',
     scope: {
       panelContents: '&',
-      currentStateName: '&'
+      currentStateName: '&',
+      submitAnswer: '='
     },
     templateUrl: 'components/gadgetPanel'
   };
