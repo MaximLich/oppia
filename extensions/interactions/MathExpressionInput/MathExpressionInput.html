@@ -18,3 +18,9 @@
 <script type="text/ng-template" id="shortResponse/MathExpressionInput">
   <span mathjax-bind="latexAnswer"></span>
 </script>
+
+<script type="text/ng-template" id="components/MathJaxBind">
+  <span ng-repeat="value in values track by $index"
+        ng-init="mathJaxBind(valueKey ? value[valueKey] : value, $last)">
+  </span>
+</script>
