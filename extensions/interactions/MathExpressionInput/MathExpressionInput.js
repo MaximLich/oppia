@@ -132,3 +132,39 @@ oppia.factory('mathExpressionInputRulesService', [function() {
     }
   };
 }]);
+
+oppia.directive('mathJaxBind', [
+  function() {
+    return {
+      restrict: 'E',
+      scope: {
+        values: '=',
+        valueKey: '=',
+        queueCallback: '='
+      },
+      templateUrl: 'components/MathJaxBind',
+      controller: [
+        '$scope', '$attrs', '$element',
+        function($scope, $attrs, $element) {
+          $scope.mathJaxBind = function(value, $last) {
+            var $el = angular.element(
+              '<span mathjax-bind="' + value + '"></span>'
+            );
+            var $script = angular.element(
+              '<script type="math/tex">'
+            ).html(value === undefined ? '' : value);
+            $el.html('');
+            $el.append($script);
+            MathJax.Hub.Queue([function($last) {
+              if ($last === true &&
+              typeof ($scope.queueCallback) === 'function') {
+                $scope.queueCallback($element);
+              }
+            }, $last], ['Reprocess', MathJax.Hub, $el[0]]);
+            angular.element($el[0]).appendTo($element);
+          };
+        }
+      ]
+    };
+  }
+]);
