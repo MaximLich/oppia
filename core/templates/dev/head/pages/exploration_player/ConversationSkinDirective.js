@@ -358,7 +358,7 @@ oppia.directive('conversationSkin', ['urlService', function(urlService) {
           var previousSupplementalCardIsNonempty = (
             totalNumCards > 1 &&
             isSupplementalCardNonempty(
-              playerTranscriptService.getCard(totalNumCards - 2)));
+              playerTranscriptService.getCard(totalNumCards - 1)));
           var nextSupplementalCardIsNonempty = isSupplementalCardNonempty(
             playerTranscriptService.getLastCard());
 
@@ -733,6 +733,14 @@ oppia.directive('conversationSkin', ['urlService', function(urlService) {
 
         $scope.getExplorationGadgetPanelsContents = function() {
           return ExplorationPlayerStateService.getGadgetPanelsContents();
+        };
+
+        $scope.setActiveCard = function(card) {
+          $scope.activeCard = card;
+        };
+
+        $scope.setExploration = function(newExploration) {
+          $scope.exploration = newExploration;
         };
       }
     ]

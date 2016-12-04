@@ -22,7 +22,10 @@ oppia.directive('oppiaGadget', function() {
     scope: {
       gadgetCustomizationArgs: '&',
       gadgetName: '&',
-      gadgetType: '&'
+      gadgetType: '&',
+      showPendingCard: '=',
+      setActiveCard: '=',
+      setExploration: '='
     },
     templateUrl: 'components/gadget',
     controller: [
@@ -37,6 +40,11 @@ oppia.directive('oppiaGadget', function() {
         el.attr(
           'gadget-name',
           oppiaHtmlEscaper.objToEscapedJson($scope.gadgetName()));
+        if ($scope.gadgetName().indexOf('Go to Card') === 0) {
+          el.attr('show-pending-card', 'showPendingCard');
+          el.attr('set-active-card', 'setActiveCard');
+          el.attr('set-exploration', 'setExploration');
+        }
 
         $scope.gadgetHtml = ($('<div>').append(el)).html();
       }

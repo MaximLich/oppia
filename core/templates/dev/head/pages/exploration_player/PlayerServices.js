@@ -383,6 +383,9 @@ oppia.factory('oppiaPlayerService', [
           deferred.resolve(DEFAULT_PROFILE_IMAGE_PATH);
         }
         return deferred.promise;
+      },
+      setExploration: function(newExploration) {
+        exploration = newExploration;
       }
     };
   }

@@ -21,7 +21,10 @@ oppia.directive('oppiaGadgetPanel', function() {
     restrict: 'E',
     scope: {
       panelContents: '&',
-      currentStateName: '&'
+      currentStateName: '&',
+      showPendingCard: '=',
+      setActiveCard: '=',
+      setExploration: '='
     },
     templateUrl: 'components/gadgetPanel'
   };
